@@ -1,0 +1,15 @@
+artifact_uri: /home/guangzhi-tang/Documents/WoS2025/game_interface/runs/mlflow/328889522657146491/b1c55ffe4ba94e8e82ff0b3c4f6b488c/artifacts
+end_time: 1758893187313
+entry_point_name: ''
+experiment_id: '328889522657146491'
+lifecycle_stage: active
+run_id: b1c55ffe4ba94e8e82ff0b3c4f6b488c
+run_name: exp1
+run_uuid: b1c55ffe4ba94e8e82ff0b3c4f6b488c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758891571049
+status: 3
+tags: []
+user_id: guangzhi-tang
