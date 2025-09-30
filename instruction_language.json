@@ -1,25 +1,27 @@
 {
     "NL": {
+        "locale": "nl_NL",
         "countdown game": {
-            "window caption": "Rock-Paper-Scissors Game",
-            "home": "Press any key to Play",
+            "window caption": "Steen, papier, schaar spel",
+            "home": "Druk op een toets om te spelen",
             "r": "Steen",
             "p": "Papier",
             "s": "Schaar"
         },
         "slowmo game": {
-            "window caption": "Slow-Motion Prediction Game",
-            "home": "Press any key to replay a slow-motion video",
-            "r": "You predicted Rock",
-            "p": "You predicted Paper",
-            "s": "You predicted Scissors",
-            "continue": "Press any key to continue",
-            "pred time": "{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)",
-            "AI predict": "AI predicted {label} with {conf:.1f}% confidence",
-            "AI latest predict": "AI last predicted {label} with {conf:.1f}% confidence"
+            "window caption": "Slow motion gokspel",
+            "home": "Druk op een toets om een slow motion video opnieuw te herhalen",
+            "r": "Jij hebt Steen gekozen",
+            "p": "Jij hebt Papier gekozen",
+            "s": "Jij hebt Schaar gekozen",
+            "continue": "Druk op een toets om door te gaan",
+            "pred time": "{prediction_text} in {prediction_time:.2n} s vertraagde tijd, (normale tijd: {real_speed_prediction_time:.2n} s)",
+            "AI predict": "De AI voorspelde {label} met een zekerheid van {conf:.3n} %",
+            "AI latest predict": "De AI voorspelde als laatst {label} met een zekerheid van {conf:.3n} %"
         }
     },
     "ENG": {
+        "locale": "en_GB",
         "countdown game": {
             "window caption": "Rock-Paper-Scissors Game",
             "home": "Press any key to Play",
@@ -34,9 +36,9 @@
             "p": "You predicted Paper",
             "s": "You predicted Scissors",
             "continue": "Press any key to continue",
-            "pred time": "{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)",
-            "AI predict": "AI predicted {label} with {conf:.1f}% confidence",
-            "AI latest predict": "AI last predicted {label} with {conf:.1f}% confidence"
+            "pred time": "{prediction_text} in {prediction_time:.2n}s slow-motion time, (normal time: {real_speed_prediction_time:.2n}s)",
+            "AI predict": "AI predicted {label} with {conf:.3n}% confidence",
+            "AI latest predict": "AI last predicted {label} with {conf:.3n}% confidence"
         }
     }
 
