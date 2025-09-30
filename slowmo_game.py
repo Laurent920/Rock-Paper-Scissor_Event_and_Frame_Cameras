@@ -297,14 +297,14 @@ def main():
                             prediction_time=prediction_time,
                             real_speed_prediction_time=real_speed_prediction_time
                         )
-                # pred_surface = font.render(f"{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)", True, TEXT_COLOR)
-                # screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-90)))
-                # text = text_display[LANG]["slowmo game"]["AI predict"].format(
-                #             label=AI_pred["label"],
-                #             conf=AI_pred["conf"] * 100
-                #         )
-                pred_surface = font.render(text, True, TEXT_COLOR)
-                screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-55)))
+                pred_surface = font.render(f"{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)", True, TEXT_COLOR)
+                screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-90)))
+                text = text_display[LANG]["slowmo game"]["AI predict"].format(
+                            label=AI_pred["label"],
+                            conf=AI_pred["conf"] * 100
+                        )
+                # pred_surface = font.render(text, True, TEXT_COLOR)
+                # screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-55)))
                 text = text_display[LANG]["slowmo game"]["AI latest predict"].format(
                             label=AI_latest_pred["label"],
                             conf=AI_latest_pred["conf"] * 100
