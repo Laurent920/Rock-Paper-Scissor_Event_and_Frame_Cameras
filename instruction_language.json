@@ -1,0 +1,43 @@
+{
+    "NL": {
+        "countdown game": {
+            "window caption": "Rock-Paper-Scissors Game",
+            "home": "Press any key to Play",
+            "r": "Steen",
+            "p": "Papier",
+            "s": "Schaar"
+        },
+        "slowmo game": {
+            "window caption": "Slow-Motion Prediction Game",
+            "home": "Press any key to replay a slow-motion video",
+            "r": "You predicted Rock",
+            "p": "You predicted Paper",
+            "s": "You predicted Scissors",
+            "continue": "Press any key to continue",
+            "pred time": "{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)",
+            "AI predict": "AI predicted {label} with {conf:.1f}% confidence",
+            "AI latest predict": "AI last predicted {label} with {conf:.1f}% confidence"
+        }
+    },
+    "ENG": {
+        "countdown game": {
+            "window caption": "Rock-Paper-Scissors Game",
+            "home": "Press any key to Play",
+            "r": "Rock",
+            "p": "Paper",
+            "s": "Scissors"
+        },
+        "slowmo game": {
+            "window caption": "Slow-Motion Prediction Game",
+            "home": "Press any key to replay a slow-motion video",
+            "r": "You predicted Rock",
+            "p": "You predicted Paper",
+            "s": "You predicted Scissors",
+            "continue": "Press any key to continue",
+            "pred time": "{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)",
+            "AI predict": "AI predicted {label} with {conf:.1f}% confidence",
+            "AI latest predict": "AI last predicted {label} with {conf:.1f}% confidence"
+        }
+    }
+
+}

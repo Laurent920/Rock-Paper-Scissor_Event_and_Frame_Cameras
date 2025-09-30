@@ -11,6 +11,8 @@ from camera_slow_motion import convert_to_slow_motion
 import queue
 import keyboard 
 
+LANG = "ENG"
+
 RAW_DIR = "raw_recordings"
 SLOWMO_DIR = "game_slow_motion_recordings"
 CHECK_INTERVAL = 5  # seconds
@@ -163,11 +165,15 @@ def find_closest_prediction(predictions, target_ts, offset_sec=0.0):
 
 # ---------------- Pygame main loop ---------------- #
 def main():
+    text_display = None
+    with open("instruction_language.json", "r", encoding="utf-8") as f:
+        text_display = json.load(f)
+
     x, y = 1600, 300
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Slow-Mo Prediction Game")
+    pygame.display.set_caption(text_display[LANG]["slowmo game"]["window caption"])
     font = pygame.font.Font(None, FONT_SIZE)
     clock = pygame.time.Clock()
 
@@ -198,7 +204,7 @@ def main():
             if key == "esc":
                 pygame.quit()
                 sys.exit()
-            elif state == STATE_WAIT:
+            elif state == STATE_WAIT and (key == "r" or key == "p" or key == "s"):
                 # Prefer newest slowmo file if available
                 if not new_slowmo_queue.empty():
                     video_path = new_slowmo_queue.get()
@@ -226,13 +232,13 @@ def main():
 
             elif state == STATE_PLAYING and prediction_text == "":
                 if key in ("r", "1"):
-                    prediction_text = "You predicted Rock"
+                    prediction_text = text_display[LANG]["slowmo game"]["r"]
                     prediction_time = time.time() - video_start_time
                 elif key in ("p", "2"):
-                    prediction_text = "You predicted Paper"
+                    prediction_text = text_display[LANG]["slowmo game"]["p"]
                     prediction_time = time.time() - video_start_time
                 elif key in ("s", "3"):
-                    prediction_text = "You predicted Scissors"
+                    prediction_text = text_display[LANG]["slowmo game"]["s"]
                     prediction_time = time.time() - video_start_time
             elif state == STATE_FINISHED:
                 state = STATE_WAIT
@@ -240,7 +246,7 @@ def main():
         screen.fill(BG_COLOR)
 
         if state == STATE_WAIT:
-            text = font.render("Press any key to replay a slow-motion video", True, TEXT_COLOR)
+            text = font.render(text_display[LANG]["slowmo game"]["home"], True, TEXT_COLOR)
             screen.blit(text, text.get_rect(center=(WIDTH//2, HEIGHT//2)))
         elif state == STATE_PLAYING or state == STATE_FINISHED:
             if cap is not None:
@@ -262,7 +268,7 @@ def main():
                 surface = pygame.surfarray.make_surface(prediction_frame.swapaxes(0,1))
                 screen.blit(surface, (0,0))
 
-                text = font.render("Press any key to continue", True, TEXT_COLOR)
+                text = font.render(text_display[LANG]["slowmo game"]["continue"], True, TEXT_COLOR)
                 screen.blit(text, text.get_rect(center=(WIDTH//2, 30)))
 
             # Display prediction text
@@ -286,11 +292,24 @@ def main():
                         print(AI_pred, AI_latest_pred)
                         AI_prediction_made = True
 
-                pred_surface = font.render(f"{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)", True, TEXT_COLOR)
-                screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-90)))
-                pred_surface = font.render(f"AI predicted {AI_pred["label"]} with {(AI_pred['conf']*100):.1f}% confidence", True, TEXT_COLOR)
+                text = text_display[LANG]["slowmo game"]["pred time"].format(
+                            prediction_text=prediction_text,
+                            prediction_time=prediction_time,
+                            real_speed_prediction_time=real_speed_prediction_time
+                        )
+                # pred_surface = font.render(f"{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)", True, TEXT_COLOR)
+                # screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-90)))
+                # text = text_display[LANG]["slowmo game"]["AI predict"].format(
+                #             label=AI_pred["label"],
+                #             conf=AI_pred["conf"] * 100
+                #         )
+                pred_surface = font.render(text, True, TEXT_COLOR)
                 screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-55)))
-                pred_surface = font.render(f"AI last predicted {AI_latest_pred["label"]} with {(AI_latest_pred['conf']*100):.1f}% confidence", True, TEXT_COLOR)
+                text = text_display[LANG]["slowmo game"]["AI latest predict"].format(
+                            label=AI_latest_pred["label"],
+                            conf=AI_latest_pred["conf"] * 100
+                        )
+                pred_surface = font.render(text, True, TEXT_COLOR)
                 screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-20)))
 
         pygame.display.flip()

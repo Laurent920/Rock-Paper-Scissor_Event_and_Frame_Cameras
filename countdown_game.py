@@ -19,6 +19,8 @@ from event_camera_recorder import record_raw_file
 from camera_slow_motion import convert_to_slow_motion
 from frame_camera_recorder import init_camera, close_camera
 
+LANG = "ENG"
+
 # UI constants
 WIDTH, HEIGHT = 1280, 720
 FPS = 60
@@ -39,7 +41,7 @@ STATE_WAIT = 'wait'
 STATE_COUNTDOWN = 'countdown'
 STATE_DONE = 'done'
 
-DEBUG = True
+DEBUG = False
 # Initial state
 state = STATE_WAIT
 recording_number = 0
@@ -104,7 +106,7 @@ def record_worker_frame(pred_stack, output_folder="raw_recordings"):
 
     width = camera.Width.GetValue()
     height = camera.Height.GetValue()
-    fps = 30
+    fps = 60
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     
     print("Camera worker started.")
@@ -173,7 +175,7 @@ def record_worker_frame(pred_stack, output_folder="raw_recordings"):
 def keyboard_listener(key_queue: queue.Queue):
     def on_key_event(event):
         if event.event_type == "down":
-            # print(event.name)
+            print(event.name)
             key_queue.put(event.name)
     keyboard.hook(on_key_event)
     keyboard.wait()  # keep listener running
@@ -229,12 +231,20 @@ def main():
     global state
     global recording_number
 
+    text_display = None
+    with open("instruction_language.json", "r", encoding="utf-8") as f:
+        text_display = json.load(f)
+
+    rock = text_display[LANG]["countdown game"]["r"]
+    paper = text_display[LANG]["countdown game"]["p"]
+    scissors = text_display[LANG]["countdown game"]["s"]
+
     x, y = 300, 300
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
 
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Countdown Rock-Paper-Scissors")
+    pygame.display.set_caption(text_display[LANG]["countdown game"]["window caption"])
     font = pygame.font.Font(None, FONT_SIZE)
     clock = pygame.time.Clock()
 
@@ -262,7 +272,7 @@ def main():
     while True:
         while not key_queue.empty():
             key = key_queue.get()
-            if state == STATE_WAIT and key == "space":
+            if state == STATE_WAIT and (key == "a" or key == "b" or key == "c"):
                 t_press = datetime.now().strftime("20%y-%m-%d_%H-%M-%S_%f")[:-3]
 
                 # Start countdown and recording at the same time
@@ -285,7 +295,7 @@ def main():
         # screen.fill(BG_COLOR)
 
         if state == STATE_WAIT:
-            text = font.render("Press Space to Start", True, TEXT_COLOR)
+            text = font.render(text_display[LANG]["countdown game"]["home"], True, TEXT_COLOR)
             rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
             screen.blit(text, rect)
 
@@ -317,17 +327,17 @@ def main():
                         if pred is not None:
                             print(f"AI predicted {pred} with confidence {conf:.2f}")
                             if pred == "Rock":
-                                choice = "Paper"
+                                choice = paper
                             elif pred == "Paper":
-                                choice = "Scissors"
+                                choice = scissors
                             else:
-                                choice = "Rock"
+                                choice = rock
                         else:
                             print("No prediction from stack ===> random choice")
-                            choice = random.choice(["Rock", "Paper", "Scissors"])
+                            choice = random.choice([rock, paper, scissors])
                     else:
                         print("Empty prediction stack ===> random choice")
-                        choice = random.choice(["Rock", "Paper", "Scissors"])
+                        choice = random.choice([rock, paper, scissors])
                     
                     display = choice
                     t_play = datetime.now().strftime("20%y-%m-%d_%H-%M-%S_%f")[:-3]
