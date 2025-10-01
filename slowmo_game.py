@@ -9,9 +9,10 @@ import threading
 import cv2
 from camera_slow_motion import convert_to_slow_motion
 import queue
-import keyboard 
+import keyboard
+import locale
 
-LANG = "ENG"
+LANG = "NL"
 
 RAW_DIR = "raw_recordings"
 SLOWMO_DIR = "game_slow_motion_recordings"
@@ -163,11 +164,25 @@ def find_closest_prediction(predictions, target_ts, offset_sec=0.0):
 
     return pred, latest_valid_pred
 
+def get_locale_label(label):
+    match label:
+        case "Rock":
+            return "r"
+        case "Paper":
+            return "p"
+        case "Scissors":
+            return "s"
+        case _:
+            # TODO: handle this?
+            return " "
+
 # ---------------- Pygame main loop ---------------- #
 def main():
     text_display = None
     with open("instruction_language.json", "r", encoding="utf-8") as f:
         text_display = json.load(f)
+
+    locale.setlocale(locale.LC_ALL, f"{text_display[LANG]['locale']}.UTF-8")
 
     x, y = 1600, 300
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
@@ -297,16 +312,20 @@ def main():
                             prediction_time=prediction_time,
                             real_speed_prediction_time=real_speed_prediction_time
                         )
-                pred_surface = font.render(f"{prediction_text} in {prediction_time:.2f}s (real time: {real_speed_prediction_time:.2f}s)", True, TEXT_COLOR)
+                pred_surface = font.render(text, True, TEXT_COLOR)
                 screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-90)))
+
+                label = get_locale_label(AI_pred["label"])
                 text = text_display[LANG]["slowmo game"]["AI predict"].format(
-                            label=AI_pred["label"],
+                            label=text_display[LANG]["countdown game"][label],
                             conf=AI_pred["conf"] * 100
                         )
                 # pred_surface = font.render(text, True, TEXT_COLOR)
                 # screen.blit(pred_surface, pred_surface.get_rect(center=(WIDTH//2, HEIGHT-55)))
+
+                label = get_locale_label(AI_latest_pred["label"])
                 text = text_display[LANG]["slowmo game"]["AI latest predict"].format(
-                            label=AI_latest_pred["label"],
+                            label=text_display[LANG]["countdown game"][label],
                             conf=AI_latest_pred["conf"] * 100
                         )
                 pred_surface = font.render(text, True, TEXT_COLOR)
